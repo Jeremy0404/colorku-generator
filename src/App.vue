@@ -15,7 +15,13 @@ const isModalOpen = ref(false);
 const currentDifficulty = ref<Difficulty>(Difficulty.Medium);
 const isGenerating = ref(false);
 
-worker.onmessage = (e: MessageEvent<{ puzzle: Grid; solution: Grid }>) => {
+worker.onmessage = async (e: MessageEvent<{ puzzle: Grid; solution: Grid }>) => {
+  // Clear the board first to trigger exit animations for all existing balls
+  currentGrid.value = Array.from({ length: 9 }, () => Array(9).fill(0));
+  
+  // Wait for the exit animation to complete (approx 300ms) plus a small buffer
+  await new Promise(resolve => setTimeout(resolve, 350));
+  
   currentGrid.value = e.data.puzzle;
   solutionGrid.value = e.data.solution;
   isSolutionShown.value = false;
