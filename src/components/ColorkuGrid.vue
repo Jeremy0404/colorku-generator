@@ -158,10 +158,12 @@ defineProps<{
 @media (max-width: 600px) {
   .colorku-board {
     padding: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    backdrop-filter: none;
   }
 
   .grid-cell {
-    --cell-size: 8.5vw; /* Scale with viewport width */
+    --cell-size: 8.5vw;
     max-width: 36px;
     max-height: 36px;
     margin: 1px;
@@ -181,6 +183,17 @@ defineProps<{
   
   .section-right::after {
     right: -5px;
+  }
+
+  /* Optimize heavy rendering effects for mobile */
+  .ball {
+    box-shadow: 
+      inset 0 -2px 3px rgba(0,0,0,0.3),
+      inset 0 1px 3px rgba(255,255,255,0.3); /* Removed external shadow */
+  }
+
+  .cell-socket {
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5); /* Simplified socket shadow */
   }
 }
 </style>

@@ -120,6 +120,7 @@ select:focus {
     width: 100%;
     align-items: stretch;
     gap: 16px;
+    backdrop-filter: none;
   }
   
   .control-group {

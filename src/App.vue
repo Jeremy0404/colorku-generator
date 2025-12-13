@@ -1,21 +1,35 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import ColorkuGrid from './components/ColorkuGrid.vue';
 import Controls from './components/Controls.vue';
-import { SudokuGenerator, Difficulty, type Grid } from './core/SudokuGenerator';
+import { Difficulty, type Grid } from './core/SudokuGenerator';
+import SudokuWorker from './core/sudoku.worker?worker';
 
-const generator = new SudokuGenerator();
+const worker = new SudokuWorker();
 const currentGrid = ref<Grid>([]);
 const currentDifficulty = ref<Difficulty>(Difficulty.Medium);
+const isGenerating = ref(false);
+
+worker.onmessage = (e: MessageEvent<Grid>) => {
+  currentGrid.value = e.data;
+  isGenerating.value = false;
+};
 
 const handleGenerate = (difficulty: Difficulty) => {
   currentDifficulty.value = difficulty;
-  currentGrid.value = generator.generate(difficulty);
+  isGenerating.value = true;
+  worker.postMessage(difficulty);
 };
 
 onMounted(() => {
   handleGenerate(Difficulty.Medium);
 });
+
+onUnmounted(() => {
+  worker.terminate();
+});
+
+
 </script>
 
 <template>
@@ -110,6 +124,10 @@ main {
     padding: 24px 16px;
     gap: 24px;
     border-radius: var(--radius-md);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(15, 23, 42, 0.95);
+    box-shadow: none;
   }
 
   h1 {
