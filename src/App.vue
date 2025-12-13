@@ -5,11 +5,13 @@ import Controls from './components/Controls.vue';
 import { Difficulty, type Grid } from './core/SudokuGenerator';
 import SudokuWorker from './core/sudoku.worker?worker';
 
+import ConfirmationModal from './components/ConfirmationModal.vue';
 
 const worker = new SudokuWorker();
 const currentGrid = shallowRef<Grid>([]);
 const solutionGrid = shallowRef<Grid>([]);
 const isSolutionShown = ref(false);
+const isModalOpen = ref(false);
 const currentDifficulty = ref<Difficulty>(Difficulty.Medium);
 const isGenerating = ref(false);
 
@@ -27,7 +29,20 @@ const handleGenerate = (difficulty: Difficulty) => {
 };
 
 const toggleSolution = () => {
-  isSolutionShown.value = !isSolutionShown.value;
+  if (!isSolutionShown.value) {
+    isModalOpen.value = true;
+  } else {
+    isSolutionShown.value = false;
+  }
+};
+
+const onConfirmSolution = () => {
+  isSolutionShown.value = true;
+  isModalOpen.value = false;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
 };
 
 onMounted(() => {
@@ -60,6 +75,14 @@ onUnmounted(() => {
           :grid="isSolutionShown ? solutionGrid : currentGrid" 
         />
       </main>
+      
+      <ConfirmationModal
+        :is-open="isModalOpen"
+        title="Voir la solution ?"
+        message="Êtes-vous sûr de vouloir voir la solution complète ?"
+        @confirm="onConfirmSolution"
+        @cancel="closeModal"
+      />
     </div>
   </div>
 </template>
