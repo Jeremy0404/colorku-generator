@@ -18,9 +18,11 @@ export class SudokuGenerator {
     private static readonly SIZE = 9;
     private static readonly BOX_SIZE = 3;
 
-    public generate(difficulty: Difficulty): Grid {
-        const grid = this.generateCompleteGrid();
-        return this.removeNumbers(grid, difficulty);
+    public generate(difficulty: Difficulty): { puzzle: Grid; solution: Grid } {
+        const solution = this.generateCompleteGrid();
+        // Create a deep copy for the puzzle so we don't modify the solution
+        const puzzle = this.removeNumbers(solution, difficulty);
+        return { puzzle, solution };
     }
 
     public generateCompleteGrid(): Grid {

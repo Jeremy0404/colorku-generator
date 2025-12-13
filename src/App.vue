@@ -5,13 +5,18 @@ import Controls from './components/Controls.vue';
 import { Difficulty, type Grid } from './core/SudokuGenerator';
 import SudokuWorker from './core/sudoku.worker?worker';
 
+
 const worker = new SudokuWorker();
 const currentGrid = shallowRef<Grid>([]);
+const solutionGrid = shallowRef<Grid>([]);
+const isSolutionShown = ref(false);
 const currentDifficulty = ref<Difficulty>(Difficulty.Medium);
 const isGenerating = ref(false);
 
-worker.onmessage = (e: MessageEvent<Grid>) => {
-  currentGrid.value = e.data;
+worker.onmessage = (e: MessageEvent<{ puzzle: Grid; solution: Grid }>) => {
+  currentGrid.value = e.data.puzzle;
+  solutionGrid.value = e.data.solution;
+  isSolutionShown.value = false;
   isGenerating.value = false;
 };
 
@@ -21,6 +26,10 @@ const handleGenerate = (difficulty: Difficulty) => {
   worker.postMessage(difficulty);
 };
 
+const toggleSolution = () => {
+  isSolutionShown.value = !isSolutionShown.value;
+};
+
 onMounted(() => {
   handleGenerate(Difficulty.Medium);
 });
@@ -28,8 +37,6 @@ onMounted(() => {
 onUnmounted(() => {
   worker.terminate();
 });
-
-
 </script>
 
 <template>
@@ -43,8 +50,15 @@ onUnmounted(() => {
       </header>
 
       <main>
-        <Controls @generate="handleGenerate" />
-        <ColorkuGrid v-if="currentGrid.length" :grid="currentGrid" />
+        <Controls 
+          @generate="handleGenerate" 
+          @toggle-solution="toggleSolution"
+          :show-solution="isSolutionShown"
+        />
+        <ColorkuGrid 
+          v-if="currentGrid.length" 
+          :grid="isSolutionShown ? solutionGrid : currentGrid" 
+        />
       </main>
     </div>
   </div>

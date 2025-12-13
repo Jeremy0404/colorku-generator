@@ -6,10 +6,19 @@ const selectedDifficulty = ref<Difficulty>(Difficulty.Medium);
 
 const emit = defineEmits<{
   (e: 'generate', difficulty: Difficulty): void;
+  (e: 'toggleSolution'): void;
+}>();
+
+defineProps<{
+  showSolution: boolean;
 }>();
 
 const generate = () => {
   emit('generate', selectedDifficulty.value);
+};
+
+const toggleSolution = () => {
+  emit('toggleSolution');
 };
 </script>
 
@@ -27,6 +36,14 @@ const generate = () => {
     
     <button @click="generate" class="generate-btn">
       Generer
+    </button>
+    
+    <button 
+      @click="toggleSolution" 
+      class="solution-btn"
+      :class="{ active: showSolution }"
+    >
+      {{ showSolution ? 'Cacher' : 'Solution' }}
     </button>
   </div>
 </template>
@@ -112,6 +129,30 @@ select:focus {
 
 .generate-btn:active {
   transform: translateY(0);
+}
+
+.solution-btn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.solution-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.solution-btn.active {
+  background: var(--bg-accent);
+  color: white;
+  border-color: transparent;
 }
 
 @media (max-width: 600px) {

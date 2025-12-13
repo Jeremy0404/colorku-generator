@@ -31,7 +31,8 @@ describe('SudokuGenerator', () => {
 
     it('should generate a puzzle with removed numbers', () => {
         const difficulty = Difficulty.Easy; // Removes 30
-        const grid = generator.generate(difficulty);
+        const result = generator.generate(difficulty);
+        const grid = result.puzzle;
 
         let emptyCount = 0;
         for (let i = 0; i < 9; i++) {
@@ -41,5 +42,6 @@ describe('SudokuGenerator', () => {
         }
 
         expect(emptyCount).toBe(difficulty);
+        expect(result.solution).toBeDefined();
     });
 });
