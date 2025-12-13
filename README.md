@@ -6,7 +6,6 @@ A Sudoku-variant puzzle generator based on colors, built with Vue 3, TypeScript,
 
 - Generate varying difficulty Colorku puzzles
 - Interactive grid interface
-- Solve and reset functionality (In Progress)
 
 ## Tech Stack
 
@@ -32,3 +31,6 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### Todo
+- Solve functionality
