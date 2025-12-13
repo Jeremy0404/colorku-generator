@@ -28,7 +28,8 @@ defineProps<{
               class="ball" 
               :style="{ 
                 '--ball-color': NUMBER_TO_COLOR[cell],
-                backgroundColor: NUMBER_TO_COLOR[cell] 
+                backgroundColor: NUMBER_TO_COLOR[cell],
+                '--enter-delay': `${(rowIndex * 9 + colIndex) * 10}ms`
               }"
             >
               <div class="highlight"></div>
@@ -124,6 +125,7 @@ defineProps<{
     inset 0 2px 6px rgba(255,255,255,0.4),
     0 4px 8px rgba(0,0,0,0.5);
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
 }
 
 .ball:hover {
@@ -143,9 +145,14 @@ defineProps<{
 }
 
 /* Animations */
-.pop-enter-active,
+.pop-enter-active {
+  transition: opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition-delay: var(--enter-delay, 0ms);
+  will-change: opacity, transform;
+}
+
 .pop-leave-active {
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
 }
 
 .pop-enter-from,
