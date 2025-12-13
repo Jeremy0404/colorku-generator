@@ -1,6 +1,6 @@
 # Colorku Generator
 
-A Sudoku-variant puzzle generator based on colors, built with Vue 3, TypeScript, and Vite.
+A Sudoku-variant puzzle generator based on colors, built with Vue 3, TypeScript, and Vite. Made to work with physical Colorku puzzles.
 
 ## Features
 
