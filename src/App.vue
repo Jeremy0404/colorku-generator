@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, shallowRef, onMounted, onUnmounted } from 'vue';
 import ColorkuGrid from './components/ColorkuGrid.vue';
 import Controls from './components/Controls.vue';
 import { Difficulty, type Grid } from './core/SudokuGenerator';
 import SudokuWorker from './core/sudoku.worker?worker';
 
 const worker = new SudokuWorker();
-const currentGrid = ref<Grid>([]);
+const currentGrid = shallowRef<Grid>([]);
 const currentDifficulty = ref<Difficulty>(Difficulty.Medium);
 const isGenerating = ref(false);
 
